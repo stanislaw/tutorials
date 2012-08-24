@@ -686,7 +686,7 @@ production:
   socket:   /var/lib/mysql/mysql.sock
 ```
 
-### РАЗНОЕ
+### Разное
 
 Если при работе с сервером наблюдаются такие строки:
 
@@ -701,5 +701,3 @@ Solution 1:
 The terminfo file /usr/share/terminfo/r/rxvt-unicode is missing from
 the remote box. scp it from your laptop.
 ```
-
-
