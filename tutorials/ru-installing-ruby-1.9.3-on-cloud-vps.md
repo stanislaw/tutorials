@@ -512,12 +512,9 @@ at least one .conf
 # file in /etc/unicorn
 #
 # (2012.06.18) Modified by s.pankevich@gmail.com
-http://github.com/stanislaw, as taken from:
-http://jay.gooby.org/post/an-etcinitdunicorn-script-for-multiple-unicorn-installations:
-# * RVM-based environments (.rvmrc should go in RAILS_ROOT if it
-differs from default gemset)
-# * Replaced 'exit 0' with 'return'. It was breaking entire script
-after executing command (fx. stop) for the first file in /etc/unicorn/
+http://github.com/stanislaw, as taken from http://jay.gooby.org/post/an-etcinitdunicorn-script-for-multiple-unicorn-installations:
+# * RVM-based environments (.rvmrc should go in RAILS_ROOT if it differs from default gemset)
+# * Replaced 'exit 0' with 'return'. It was breaking entire script after executing command (fx. stop) for the first file in /etc/unicorn/
 
 # Modified by jay@gooby.org http://github.com/jaygooby
 # based on http://gist.github.com/308216 by http://github.com/mguterl
@@ -528,21 +525,16 @@ after executing command (fx. stop) for the first file in /etc/unicorn/
 ## RAILS_ROOT=/home/stanislaw/apps/my_app/current
 ## UNICORN_PID=/home/stanislaw/apps/my_app/shared/pids/unicorn.pid
 
-# This configures a unicorn master for your app at
-/home/stanislaw/apps/my_app/current running in
-# production mode. It will read config/unicorn.rb for further set up.
+# This configures a unicorn master for your app at /home/stanislaw/apps/my_app/current running in production mode. It will read config/unicorn.rb for further set up.
 #
-# You should ensure different ports or sockets are set in each
-config/unicorn.rb if
-# you are running more than one master concurrently.
+# You should ensure different ports or sockets are set in each config/unicorn.rb if you are running more than one master concurrently.
 #
-# If you call this script without any config parameters, it will
-attempt to run the
+# If you call this script without any config parameters, it will attempt to run the
 # init command for all your unicorn configurations listed in /etc/unicorn/*.conf
 #
 # /etc/init.d/unicorn start # starts all unicorns
 #
-# If you specify a particular config, it will only operate on that one
+# If you specify a particular config, it will only operate on that one:
 #
 # /etc/init.d/unicorn start /etc/unicorn/my_app.conf
 
@@ -609,9 +601,7 @@ config/unicorn.rb -E $RAILS_ENV -D"
 
 start_stop () {
 
-  # either run the start/stop/reload/etc command for every config
-under /etc/unicorn
-  # or just do it for a specific one
+  # either run the start/stop/reload/etc command for every config under /etc/unicorn or just do it for a specific one
 
   # $1 contains the start/stop/etc command
   # $2 if it exists, should be the specific config we want to act on
@@ -694,10 +684,15 @@ production:
 tput: unknown terminal "rxvt-unicode"
 ```
 
-Подойдёт такое решение:
+подойдёт такое решение:
 
 ```bash
 Solution 1:
 The terminfo file /usr/share/terminfo/r/rxvt-unicode is missing from
 the remote box. scp it from your laptop.
 ```
+
+## Обратная связь
+
+Нашли ошибку, неточность? Знаете, как сделать лучше? Откройте тикет на
+issue tracker или создайте Pull Request.
