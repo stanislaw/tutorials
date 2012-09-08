@@ -585,6 +585,13 @@ sudo chmod +x /usr/local/bin/run-puma
 
     # ...
 
+    upstream micro-apps_server {
+        server unix:/home/stanislaw/apps/micro-apps/puma/puma.sock
+fail_timeout=0;
+    }
+
+    # ...
+
     # Директива для хоста tarot.example.ru
     server {
         listen 80;
@@ -659,3 +666,25 @@ sudo chmod +x /usr/local/bin/run-puma
         }
     }
 ```
+
+## Заключение
+
+Исходная постановка вопроса на StackOverflow:
+
+http://stackoverflow.com/questions/12125924/how-to-run-multiple-tiny-ruby-rack-apps-on-one-server
+
+Репозиторий-прототип структуры приложения-маршрутизатора, описанного в статье: 
+
+https://github.com/stanislaw/skeletons/tree/master/rack_stack
+
+## Благодарности
+
+Автор выражает благодарность Реми Тейлору (Remi Taylor), remi
+
+## Обратная связь
+
+Нашли ошибку, неточность? Знаете, как сделать лучше? Откройте тикет на issue tracker или создайте Pull Request - "I am on it".
+
+## Копирайт ;)
+
+(c) Станислав Панкевич, 2012
