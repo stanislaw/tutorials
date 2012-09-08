@@ -667,6 +667,29 @@ fail_timeout=0;
     }
 ```
 
+### Финальная структура приложения micro-apps
+
+```bash
+[root@onapp micro-apps]# ls -l
+total 24
+drwxr-xr-x 14 stanislaw users 4096 Sep  8 06:09 blog
+-rw-r--r--  1 stanislaw users  287 Sep  8 02:08 config.ru
+-rw-r--r--  1 stanislaw users  191 Sep  8 01:59 Gemfile
+-rw-r--r--  1 stanislaw users 4030 Sep  8 04:41 Gemfile.lock
+drwxr-xr-x 14 stanislaw users 4096 Sep  8 06:06 tarot
+drwxr-xr-x  2 stanislaw users 4096 Sep  8 14:00 puma
+```
+
+```bash
+[root@onapp micro-apps]# ls -l puma/
+total 28
+-rw-r--r-- 1 stanislaw users   113 Sep  8 08:44 config.rb
+-rw-r--r-- 1 stanislaw users 15858 Sep  8 10:25 puma.log
+-rw-r--r-- 1 stanislaw users     5 Sep  8 10:25 puma.pid
+srwxrwxrwx 1 stanislaw users     0 Sep  8 10:10 puma.sock
+-rw-r--r-- 1 stanislaw users   378 Sep  8 10:25 puma.state
+```
+
 ## Заключение
 
 Исходная постановка вопроса на StackOverflow:
