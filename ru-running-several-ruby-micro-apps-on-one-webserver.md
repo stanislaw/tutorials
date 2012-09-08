@@ -39,7 +39,7 @@
 
 Задача - организовать из наших приложений своеобразную "гирлянду", которую мы хотим повесить на один единственный веб-сервер, ответственный за микро-приложения. На языке Ruby - это, вероятно, можно назвать "стеком, составленным из Rack-приложений" или "Rack apps stack".
 
-*Примечание. Если вы не знаете, что Rails или Sinatra в своей основе являются Rack-приложениями - прочитайте, например, эту [статью](http://m.onkey.org/ruby-on-rack-1-hello-rack) и [эту](http://habrahabr.ru/post/131429/).*
+**Примечание**. Если вы не знаете, что Rails или Sinatra в своей основе являются Rack-приложениями - прочитайте, например, эту [статью](http://m.onkey.org/ruby-on-rack-1-hello-rack) и [эту](http://habrahabr.ru/post/131429/).
 
 На самом низком уровне Ruby, эту задачу может решить ```Rack::Builder``` (любители низких уровней могут в деталях рассмотреть [Rack::Builder](http://rack.rubyforge.org/doc/classes/Rack/Builder.html)). Мы же воспользуемся [RackStack](https://github.com/remi/rack-stack) - он позволит нам сделать то же самое, что делает RackBuilder, но проще и изящнее.
 
@@ -66,11 +66,11 @@
 В предыдущей статье была предложена следующая структура для размещения
 приложений: `~/apps`, где `~/` это домашняя директория пользователя `/home/stanislaw`. 
 
-Итак, в директории ```apps``` создаём папку ```micro-apps``` и переходим в неё. ```micro-apps``` - это название для RackStack-приложения, которое будет служить маршрутизатором для запросов поступающих на соответствующие хосты: ```tarot.example.ru``` и ```blog.example.ru```
+Итак, в директории `apps` создаём папку `micro-apps` и переходим в неё. `micro-apps` - это название для RackStack-приложения, которое будет служить маршрутизатором для запросов поступающих на соответствующие хосты: `tarot.example.ru` и `blog.example.ru`
 
 ### Настраиваем главный репозиторий и репозитории-подмодули
 
-В папке ```micro-apps``` создаём гит репозиторий: ```git init```.
+В папке `micro-apps` создаём гит репозиторий: `git init`.
 
 Создаём подмодули репозиториев tarot и blog (ваши репозитории, естественно уже должны где-то существовать):
 
@@ -79,10 +79,10 @@ $ git submodule add git clone git@bitbucket.org:stanisla/tarot.git tarot
 $ git submodule add git clone git@bitbucket.org:stanisla/blog.git blog
 ```
 
-В документации по Git submodules - рекомендуется внимательно прочитать про то, как именно происходит взаимодействие между главным репозиторием и репозиториями-подмодулями (в нашем случае главный - это micro-apps, подмодули - tarot и blog)
+В документации по [Git submodules](http://git-scm.com/book/en/Git-Tools-Submodules) - рекомендуется внимательно прочитать про то, как именно происходит взаимодействие между главным репозиторием и репозиториями-подмодулями (в нашем случае главный - это micro-apps, подмодули - tarot и blog)
 
-В результате инициализации подмодулей в нашей папке ```micro-apps```
-теперь есть подпапки ```tarot``` и ```blog``` с нашими проектами.
+В результате инициализации подмодулей в нашей папке `micro-apps`
+теперь есть подпапки `tarot` и `blog` с нашими проектами.
 
 ### Создаём Gemfile
 
@@ -97,7 +97,7 @@ Dir.glob(File.join(File.dirname(__FILE__), '*', "Gemfile")) do |gemfile|
 end
 ```
 
-Особый интерес представляет блок ```Dir...``` - мы загружаем зависимости из всех подпроектов, находящихся в папке micro-apps.
+Особый интерес представляет блок `Dir...` - мы загружаем зависимости из всех подпроектов, находящихся в папке `micro-apps`.
 
 Устанавливаем зависимости, запускаем 
 
@@ -107,14 +107,17 @@ bundle
 
 ### Настраиваем RackStack
 
-В папке ```micro-apps``` создаём файл ```config.ru```:
+В папке `micro-apps` создаём файл `config.ru`:
 
 ```ruby
 require 'rack-stack'
 
-# Запускаем мини-приложения
-require './tarot/tarot' # tarot/tarot.rb - это главный файл Sinatra
-require './blog/config/environment' # Стандартная строка загрузки Rails-приложения с классической структурой
+# Требуем мини-приложения:
+
+# Sinatra-приложение
+require './tarot/tarot'
+# Стандартная строка загрузки Rails-приложения с классической структурой
+require './blog/config/environment' 
 
 # Задаём хосты для миниприложений
 tarot_host = ENV['RACK_ENV'] == 'production' ? 'tarot.example.ru' : 'tarot.localhost'
@@ -128,7 +131,7 @@ end
 run rack_stack
 ```
 
-Предполагается, что файл ```./tarot/tarot.rb``` имеет следующую классическую структуру Sinatra:
+Предполагается, что файл `./tarot/tarot.rb` имеет следующую классическую структуру Sinatra:
 
 ```ruby
 require 'sinatra'
@@ -136,16 +139,13 @@ require 'sinatra'
 # ...
 
 class TarotApp < Sinatra::Base
-  # Тут про расклады Taro
+  # Тут про расклады Taрo
 end
 ```
 
-Также обратите внимание, что файл не должен содержать строк типа ```run!``` внутри класса, т.к. мы не хотим чтобы приложение запускалось сразу же - запускать его будет RackStack.
+Также обратите внимание, что файл не должен содержать строк типа `run!` внутри класса, т.к. мы не хотим, чтобы приложение запускалось сразу же - запускать его будет RackStack.
 
-Обратите внимание на то, что в production и development хосты
-различаются. Для того, чтобы можно было протестировать приложение на
-локальной машине - нужно прописать в файле ```/etc/hosts``` на своей локальной
-машине соответствующие директивы: ```tarot.localhost 127.0.0.1``` и ```blog.localhost 127.0.0.1```.
+Обратите внимание на то, что в production и development хосты различаются. Для того, чтобы можно было протестировать приложение на локальной машине - нужно прописать в файле `/etc/hosts` на своей локальной машине соответствующие директивы: `tarot.localhost 127.0.0.1` и `blog.localhost 127.0.0.1`.
 
 ### Конфигурация Puma (micro-apps/puma/config.rb)
 
@@ -162,20 +162,13 @@ state_path "./puma/puma.state"
 bind "unix://./puma/puma.sock"
 ```
 
-Данная конфигурация предназначена исключительн для продакшна. При
-запуске сервера, он будет создавать в папке ```micro-apps/puma```
-следующие файлы: ```puma.pid``` - номер процесса (используется
-скриптами), ```puma.sock``` - используется для получения запросов от Nginx
-(коротко о сокетах - можно посмотретьв предыдущей статье),
-```puma.state``` - рабочая конфигурация сервера в "рабочем состоянии",
-генерируется при создании сервера. 
+Данная конфигурация предназначена исключительно для продакшна. При запуске сервера, он будет создавать в папке `micro-apps/puma` следующие файлы: `puma.pid` - номер процесса (используется скриптами), `puma.sock` - используется для получения запросов от Nginx (коротко о сокетах - можно посмотреть в предыдущей статье), `puma.state` - рабочая конфигурация сервера в "рабочем состоянии", опционально генерируется при запуске сервера. 
 
-```Примечание. В документации Puma описывается
-возможность управления запуском/остановкой/перезагрузкой через так называемый controlapp - дополнительное приложение, которое висит на определённом порту и позволяет управлять сервером через веб - в этой статье эта функциональность отключена - управление запуском/остановкой происходит стандартным образом через посылку сигналов типа KILL, USR2 процессу с номером, определённым в puma.pid```
+**Примечание** В документации Puma описывается возможность управления запуском/остановкой/перезагрузкой через так называемый controlapp - дополнительное приложение, которое висит на определённом порту и позволяет управлять сервером через веб - в этой статье эта функциональность отключена - управление запуском/остановкой происходит стандартным образом через посылку сигналов типа KILL, USR2 процессу с номером, определённым в puma.pid.
 
 ### Скрипта для автозапуска Puma на сервере CentOS 5.5
 
-*Внимание!* Автор статьи специально модифицировал скрипты для работы в CentOS с использованием локального (```~./rvm```) Ruby-окружения (см. комментарии в скрипте). Оригинальные скрипты рассчитаны на Debian!
+**Внимание!** Автор статьи специально модифицировал скрипты для работы в CentOS с использованием локального (```~./rvm```) Ruby-окружения (см.  комментарии в скрипте). Оригинальные скрипты из репозитория Puma рассчитаны на Debian!
 
 #### Скрипт ```/etc/init.d/puma```
 
@@ -195,7 +188,9 @@ bind "unix://./puma/puma.sock"
 #
 # Do NOT "set -e"
 
-# Original script https://github.com/puma/puma/blob/master/tools/jungle/puma is modified here by Stanislaw Pankevich <s.pankevich@gmail.com> to run on CentOS 5.5 boxes.
+# Original script https://github.com/puma/puma/blob/master/tools/jungle/puma
+# It was modified here by Stanislaw Pankevich <s.pankevich@gmail.com> 
+# to run on CentOS 5.5 boxes.
 # Script works perfectly on CentOS 5: script uses its native daemon().
 # Puma is being stopped/restarted by sending signals, control app is not used. 
 
@@ -342,8 +337,7 @@ do_restart_one() {
     kill -s USR2 `cat $PIDFILE`
     # TODO Check if process exist
   else
-    log_daemon_msg "--> Your puma was never playing... Let's get it out
-there first" 
+    log_daemon_msg "--> Your puma was never playing... Let's get it out there first" 
     user=`echo $i | cut -d , -f 2`
     config_file=`echo $i | cut -d , -f 3`
     if [ "$config_file" = "" ]; then
@@ -395,8 +389,7 @@ do_add() {
     if [ "`grep -c "^$1" $CONFIG`" -eq 0 ]; then
       str=$1
     else
-      echo "The app is already being managed. Remove it if you want to
-update its config."
+      echo "The app is already being managed. Remove it if you want to update its config."
       exit 1 
     fi
   else
@@ -426,8 +419,7 @@ update its config."
 
   # Add it to the jungle 
   echo $str >> $CONFIG
-  log_daemon_msg "Added a Puma to the jungle: $str. You still have to
-start it though."
+  log_daemon_msg "Added a Puma to the jungle: $str. You still have to start it though."
 }
 
 do_remove() {
@@ -585,11 +577,14 @@ sudo cp run-puma /usr/local/bin
 sudo chmod +x /usr/local/bin/run-puma
 ```
 
-Ещё раз ссылка на общая документация по работе скрипта: https://github.com/puma/puma/tree/master/tools/jungle
+Ещё раз ссылка на общую документацию по работе скрипта: https://github.com/puma/puma/tree/master/tools/jungle
 
-### Конфигурация Nginx (/etc/nginx/nginx.conf)
+### Конфигурация Nginx `/etc/nginx/nginx.conf`
 
 ```text
+
+    # ...
+
     # Директива для хоста tarot.example.ru
     server {
         listen 80;
@@ -597,9 +592,9 @@ sudo chmod +x /usr/local/bin/run-puma
     
         server_name tarot.example.ru;
 
-       # location /robots.txt { alias /usr/local/etc/nginx/robots_disallow.txt;
-} 
-       location ~ ^/assets/ {
+        # location /robots.txt { alias /usr/local/etc/nginx/robots_disallow.txt; } 
+
+        location ~ ^/assets/ {
             expires 1y;
             add_header Cache-Control public;
             add_header Last-Modified "";
@@ -634,8 +629,8 @@ sudo chmod +x /usr/local/bin/run-puma
     
         server_name blog.example.ru;
 
-       # location /robots.txt { alias /usr/local/etc/nginx/robots_disallow.txt;
-} 
+       # location /robots.txt { alias /usr/local/etc/nginx/robots_disallow.txt; } 
+
        location ~ ^/assets/ {
             expires 1y;
             add_header Cache-Control public;
