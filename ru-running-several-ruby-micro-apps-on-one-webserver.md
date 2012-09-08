@@ -123,12 +123,10 @@ require './blog/config/environment'
 tarot_host = ENV['RACK_ENV'] == 'production' ? 'tarot.example.ru' : 'tarot.localhost'
 blog_host = ENV['RACK_ENV'] == 'production' ? 'blog.example.ru' : 'blog.localhost'
 
-rack_stack = RackStack.app do
+run(RackStack.app do
   run TarotApp, :when => { :host => tarot_host }
   run Blog::Application, :when => { :host => blog_host }
-end
-
-run rack_stack
+end)
 ```
 
 Предполагается, что файл `./tarot/tarot.rb` имеет следующую классическую структуру Sinatra:
