@@ -678,7 +678,7 @@ fail_timeout=0;
 /etc/init.d/puma restart
 ```
 
-Команду для запуска приложения из его директории `~/apps/micro-apps` можно просмотреть содержимое файла `/usr/local/bin/run-puma`.
+Команду для запуска приложения из его директории `~/apps/micro-apps` можно посмотреть в файле `/usr/local/bin/run-puma`.
 
 ### Финальная структура приложения micro-apps
 
