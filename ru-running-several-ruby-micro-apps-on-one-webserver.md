@@ -679,7 +679,7 @@ https://github.com/stanislaw/skeletons/tree/master/rack_stack
 
 ## Благодарности
 
-Автор выражает благодарность Реми Тейлору (Remi Taylor), remi
+Автор выражает благодарность Реми Тейлору (Remi Taylor), @remi за его работу над [rack-stack](https://github.com/remi/rack-stack)
 
 ## Обратная связь
 
